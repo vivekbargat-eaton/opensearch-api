@@ -69,14 +69,26 @@ export class Search {
    * run-func search queryString title '+(salad | soup) -broccoli  (tomato | apple)'
    */
   static async queryString(field: any, query: any) {
-    const body = {
-      query: {
-        query_string: {
-          default_field: field,
-          query,
-        },
-      },
-    };
+    let body : any;
+    if (!field) {
+      body = {
+        query: {
+          query_string: {
+            "query": query,
+          },
+        }
+      };
+    } else {
+      body = {
+        query: {
+          query_string: {
+            default_field: field,
+            query,
+          },
+        }
+      };
+    }
+
     let awsClient = await client();
 
     return new Promise<any>((resolve, reject) => {
@@ -125,7 +137,7 @@ export class Search {
    * lte (less than or equal to)
    * run-func search range sodium 0 100
    */
-   static async range(field: any, gte: any, lte: any) {
+  static async range(field: any, gte: any, lte: any) {
     const body = {
       query: {
         range: {
