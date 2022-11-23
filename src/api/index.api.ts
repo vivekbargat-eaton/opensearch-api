@@ -9,9 +9,12 @@ export async function getIndices(req: Request, res: Response) {
     let awsClient = await client();
     awsClient.cat.indices({ format: "json" }, (error : any, result : any) => {
         if (error) {
-            res.status(error.statusCode).json(error);
+            if(error.statusCode)
+                res.status(error.statusCode).send(error);
+            else
+                res.send(error)
         } else {
-            res.status(result.statusCode).json(result.body);
+            res.status(result.statusCode).send(result.body);
         }
     });
 };

@@ -14,13 +14,13 @@ export function initializeRoute(): Router {
      serviceRoutes.get("/stats", stats);
 
     // Analytics Search
-    serviceRoutes.get("/match/:field/:query", match);
-    serviceRoutes.get("/phrase/:field/:query/:slop", phrase);
-    serviceRoutes.get("/queryString/:field/:query", queryString);
-    serviceRoutes.get("/range/:field/:gte/:lte", range);
+    serviceRoutes.get("/match/:field/:query/:from/:size", match);
+    serviceRoutes.get("/phrase/:field/:query/:slop/:from/:size", phrase);
+    serviceRoutes.get("/queryString/:field/:query/:from/:size", queryString);
+    serviceRoutes.get("/range/:field/:gte/:lte/:from/:size", range);
 
     // Basic Search
-    serviceRoutes.get("/term/:field/:value", term);
+    serviceRoutes.get("/term/:field/:value/:from/:size", term);
 
     // Indexes
     serviceRoutes.get("/getIndices", getIndices);
