@@ -163,8 +163,8 @@ export class Search {
             lte,
           },
         },
-        sort: [{date: 'desc'}],
       },
+      sort: [{date: 'desc'}],
     };
     let opensearchClient = await client();
 
