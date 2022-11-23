@@ -3,8 +3,8 @@ import {client, indexName as index} from '../configuration/config';
 export class Search {
   /**
    * Finding matches sorted by relevance (full-text query)
-   * run-func search match title "soups with beer and garlic"
-   * run-func search match title "pizza salad and cheese"
+   * search match title "soups with beer and garlic"
+   * search match title "pizza salad and cheese"
    */
   static async match(field: any, query: any, from: number, size: number) {
     const body = {
@@ -35,8 +35,8 @@ export class Search {
 
   /**
    * Matching a phrase (full-text query)
-   * run-func search phrase title 'pasta with cheese'
-   * run-func search phrase title 'milk chocolate cake'
+   * search phrase title 'pasta with cheese'
+   * search phrase title 'milk chocolate cake'
    */
   static async phrase(
     field: any,
@@ -73,8 +73,8 @@ export class Search {
 
   /**
    * Using special operators within a query string and a size parameter (full-text query)
-   * run-func search queryString title '+(dessert | cake) -garlic  (mango | caramel | cinnamon)'
-   * run-func search queryString title '+(salad | soup) -broccoli  (tomato | apple)'
+   * search queryString title '+(dessert | cake) -garlic  (mango | caramel | cinnamon)'
+   * search queryString title '+(salad | soup) -broccoli  (tomato | apple)'
    */
   static async queryString(field: any, query: any, from: number, size: number) {
     let body: any;
@@ -118,7 +118,7 @@ export class Search {
 
   /**
    * Searching for exact matches of a value in a field (term-level query)
-   * run-func search term sodium 0
+   * search term sodium 0
    */
   static async term(field: any, value: any, from: number, size: number) {
     const body = {
@@ -150,9 +150,15 @@ export class Search {
    * gte (greater than or equal to)
    * lt (less than)
    * lte (less than or equal to)
-   * run-func search range sodium 0 100
+   * search range sodium 0 100
    */
-  static async range(field: any, gte: any, lte: any, from: number, size: number) {
+  static async range(
+    field: any,
+    gte: any,
+    lte: any,
+    from: number,
+    size: number
+  ) {
     const body = {
       from: from,
       size: size,
@@ -181,7 +187,6 @@ export class Search {
 
   /**
    * Combining several queries together (boolean query)
-   * run-func search boolean
    */
   static async boolean(from: number, size: number) {
     const body = {
@@ -211,6 +216,34 @@ export class Search {
           resolve(result);
         }
       });
+    });
+  }
+
+  /**
+   * Lucene Search
+   * search  with /api/luceneSearch/"categories:potato AND fat:(>= 5 OR < 10)"/0/5
+   */
+  static async luceneSearch(query: any, from: number, size: number) {
+
+    let opensearchClient = await client();
+
+    return new Promise<any>((resolve, reject) => {
+      opensearchClient.search(
+        {
+          index: index,
+          from: from,
+          size: size,
+          q: query,
+          // sort: [{date: 'desc'}],
+        },
+        (error: any, result: any) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
     });
   }
 }

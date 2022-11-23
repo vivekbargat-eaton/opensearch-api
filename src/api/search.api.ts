@@ -78,4 +78,18 @@ export async function range(req: Request, res: Response) {
     }
 }
 
+export async function luceneSearch(req: Request, res: Response) {
+    let query = JSON.parse(req.params.query);
+    let from = JSON.parse(req.params.from);
+    let size = JSON.parse(req.params.size);
+
+    try {
+        const elasticResponse = await Search.luceneSearch(query, from, size);
+        return res.status(elasticResponse.statusCode).send(elasticResponse.body)
+    }
+    catch (exception : any) {
+        return res.status(exception.statusCode).send(exception.message);
+    }
+}
+
 

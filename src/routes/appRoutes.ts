@@ -2,7 +2,7 @@ import { Router } from "express";
 import { health } from "../api/cluster-health.api";
 import { deleteIndex, getIndices, getMapping } from "../api/index.api";
 import { stats } from "../api/node-stats.api";
-import { match, phrase, queryString, range, term } from "../api/search.api";
+import { luceneSearch, match, phrase, queryString, range, term } from "../api/search.api";
 
 export function initializeRoute(): Router {
     let serviceRoutes: Router = Router();
@@ -21,6 +21,9 @@ export function initializeRoute(): Router {
 
     // Basic Search
     serviceRoutes.get("/term/:field/:value/:from/:size", term);
+
+     // Lucene Search
+     serviceRoutes.get("/luceneSearch/:query/:from/:size", luceneSearch);
 
     // Indexes
     serviceRoutes.get("/getIndices", getIndices);
