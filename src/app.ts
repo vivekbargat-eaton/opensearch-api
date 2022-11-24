@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import * as bodyParser from "body-parser";
 import { initializeRoute } from "./routes/appRoutes";
+import cors from "cors";
 
 const app = express();
 let allowCrossDomain = (req: express.Request, res: express.Response, next: Function) => {
@@ -11,6 +12,7 @@ let allowCrossDomain = (req: express.Request, res: express.Response, next: Funct
   next();
 };
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(allowCrossDomain);
